@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EventeNativeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Drzava">
+    <Key>
+      <PropertyRef Name="DrzavaId" />
+    </Key>
+    <Property Name="DrzavaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Grad" Relationship="Self.FK_Drzava_Grad" FromRole="Drzava" ToRole="Grad" />
+  </EntityType>
+  <EntityType Name="Eventi">
+    <Key>
+      <PropertyRef Name="EventId" />
+    </Key>
+    <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Opis" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ObjekatOdrzavanja" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="KategorijaId" Type="Int32" Nullable="false" />
+    <Property Name="GradId" Type="Int32" Nullable="false" />
+    <Property Name="Adresa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DatumOdrzavanja" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="Slika" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="Interesovanja" Relationship="Self.FK_Eventi_Interesovanja" FromRole="Eventi" ToRole="Interesovanja" />
+    <NavigationProperty Name="Grad" Relationship="Self.FK_Grad_Eventi" FromRole="Eventi" ToRole="Grad" />
+    <NavigationProperty Name="Kategorije" Relationship="Self.FK_Kategorija_Eventi" FromRole="Eventi" ToRole="Kategorije" />
+  </EntityType>
+  <EntityType Name="Grad">
+    <Key>
+      <PropertyRef Name="GradId" />
+    </Key>
+    <Property Name="GradId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DrzavaId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Drzava" Relationship="Self.FK_Drzava_Grad" FromRole="Grad" ToRole="Drzava" />
+    <NavigationProperty Name="Eventi" Relationship="Self.FK_Grad_Eventi" FromRole="Grad" ToRole="Eventi" />
+  </EntityType>
+  <EntityType Name="Interesovanja">
+    <Key>
+      <PropertyRef Name="EventId" />
+      <PropertyRef Name="KorisnikId" />
+    </Key>
+    <Property Name="EventId" Type="Int32" Nullable="false" />
+    <Property Name="KorisnikId" Type="Int32" Nullable="false" />
+    <Property Name="Idem" Type="Boolean" Nullable="false" />
+    <Property Name="Zainteresovan" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Eventi" Relationship="Self.FK_Eventi_Interesovanja" FromRole="Interesovanja" ToRole="Eventi" />
+    <NavigationProperty Name="Korisnici" Relationship="Self.FK_Korisnici_Interesovanja" FromRole="Interesovanja" ToRole="Korisnici" />
+  </EntityType>
+  <EntityType Name="Kategorije">
+    <Key>
+      <PropertyRef Name="KategorijaId" />
+    </Key>
+    <Property Name="KategorijaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Eventi" Relationship="Self.FK_Kategorija_Eventi" FromRole="Kategorije" ToRole="Eventi" />
+  </EntityType>
+  <EntityType Name="Korisnici">
+    <Key>
+      <PropertyRef Name="KorisnikId" />
+    </Key>
+    <Property Name="KorisnikId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Prezime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="KorisnickoIme" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Lozinka" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="Slika" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="Interesovanja" Relationship="Self.FK_Korisnici_Interesovanja" FromRole="Korisnici" ToRole="Interesovanja" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Drzava_Grad">
+    <End Role="Drzava" Type="Self.Drzava" Multiplicity="1" />
+    <End Role="Grad" Type="Self.Grad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Drzava">
+        <PropertyRef Name="DrzavaId" />
+      </Principal>
+      <Dependent Role="Grad">
+        <PropertyRef Name="DrzavaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Eventi_Interesovanja">
+    <End Role="Eventi" Type="Self.Eventi" Multiplicity="1" />
+    <End Role="Interesovanja" Type="Self.Interesovanja" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Eventi">
+        <PropertyRef Name="EventId" />
+      </Principal>
+      <Dependent Role="Interesovanja">
+        <PropertyRef Name="EventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Grad_Eventi">
+    <End Role="Grad" Type="Self.Grad" Multiplicity="1" />
+    <End Role="Eventi" Type="Self.Eventi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grad">
+        <PropertyRef Name="GradId" />
+      </Principal>
+      <Dependent Role="Eventi">
+        <PropertyRef Name="GradId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kategorija_Eventi">
+    <End Role="Kategorije" Type="Self.Kategorije" Multiplicity="1" />
+    <End Role="Eventi" Type="Self.Eventi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kategorije">
+        <PropertyRef Name="KategorijaId" />
+      </Principal>
+      <Dependent Role="Eventi">
+        <PropertyRef Name="KategorijaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Korisnici_Interesovanja">
+    <End Role="Korisnici" Type="Self.Korisnici" Multiplicity="1" />
+    <End Role="Interesovanja" Type="Self.Interesovanja" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Korisnici">
+        <PropertyRef Name="KorisnikId" />
+      </Principal>
+      <Dependent Role="Interesovanja">
+        <PropertyRef Name="KorisnikId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="EventeNativeEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Drzava" EntityType="Self.Drzava" />
+    <EntitySet Name="Eventi" EntityType="Self.Eventi" />
+    <EntitySet Name="Grad" EntityType="Self.Grad" />
+    <EntitySet Name="Interesovanja" EntityType="Self.Interesovanja" />
+    <EntitySet Name="Kategorije" EntityType="Self.Kategorije" />
+    <EntitySet Name="Korisnici" EntityType="Self.Korisnici" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Drzava_Grad" Association="Self.FK_Drzava_Grad">
+      <End Role="Drzava" EntitySet="Drzava" />
+      <End Role="Grad" EntitySet="Grad" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Eventi_Interesovanja" Association="Self.FK_Eventi_Interesovanja">
+      <End Role="Eventi" EntitySet="Eventi" />
+      <End Role="Interesovanja" EntitySet="Interesovanja" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Grad_Eventi" Association="Self.FK_Grad_Eventi">
+      <End Role="Grad" EntitySet="Grad" />
+      <End Role="Eventi" EntitySet="Eventi" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kategorija_Eventi" Association="Self.FK_Kategorija_Eventi">
+      <End Role="Kategorije" EntitySet="Kategorije" />
+      <End Role="Eventi" EntitySet="Eventi" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Korisnici_Interesovanja" Association="Self.FK_Korisnici_Interesovanja">
+      <End Role="Korisnici" EntitySet="Korisnici" />
+      <End Role="Interesovanja" EntitySet="Interesovanja" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
